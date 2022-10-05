@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Dimensions, Text, View, TouchableOpacity, TextInput, Image } from 'react-native';
+import { StyleSheet, Dimensions, Text, View, TouchableOpacity, TextInput, Image, KeyboardAvoidingView } from 'react-native';
 
-const width = Dimensions.get('window').width; //full width
-const height = Dimensions.get('window').height; //full height
+const width = Dimensions.get('window').width;
+const height = Dimensions.get('window').height;
 
 function Login({ navigation }) {
 
@@ -13,40 +13,44 @@ function Login({ navigation }) {
   return (
     <View style={styles.container}>
       <Image source={require('../../assets/background_login.png')} style={{ width: width, height: width*0.74 }}/>
-      <View style={styles.loginContainer}>
-        <Image source={require('../../assets/guinchonline_logo.png')} style={{ width: 320, height: 50 }} />
-        <Text style={styles.grayText}>Entre com sua conta</Text>
-        <View>
-          <TextInput
-            style={inputFocus ? styles.inputFocus : styles.input}
-            onFocus={() => setInputFocus(true)}
-            onBlur={() => setInputFocus(false)}
-            placeholder="Email"
-            keyboardType="email-address"
-          />
-          <TextInput
-            style={inputFocus2 ? styles.inputFocus : styles.input}
-            onFocus={() => setInputFocus2(true)}
-            onBlur={() => setInputFocus2(false)}
-            placeholder="Senha"
-            keyboardType="default"
-            secureTextEntry="true"
-          />
-        </View>
-        <TouchableOpacity
-          style={styles.btnLogin}
-          onPress={() => navigation.navigate('Home')}
-        >
-          <Text style={{ fontSize: 16 }}>Entrar</Text>
-        </TouchableOpacity>
-        <TouchableOpacity><Text style={{ fontSize: 16 }}>Esqueceu a senha ?</Text></TouchableOpacity>
-        <View style={styles.singupContainer}>
-          <Text style={styles.grayText}>Você tem uma conta ? </Text>
-          <TouchableOpacity>
-            <Text style={{ fontSize: 16, color: '#FFBE0C' }}>Crie uma</Text>
+      <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
+        <View style={styles.loginContainer}>
+          <Image source={require('../../assets/guinchonline_logo.png')} style={{ width: 320, height: 50 }} />
+          <Text style={styles.grayText}>Entre com sua conta</Text>
+          <View>
+            <TextInput
+              style={inputFocus ? styles.inputFocus : styles.input}
+              onFocus={() => setInputFocus(true)}
+              onBlur={() => setInputFocus(false)}
+              placeholder="Email"
+              keyboardType="email-address"
+            />
+            <TextInput
+              style={inputFocus2 ? styles.inputFocus : styles.input}
+              onFocus={() => setInputFocus2(true)}
+              onBlur={() => setInputFocus2(false)}
+              placeholder="Senha"
+              keyboardType="default"
+              secureTextEntry="true"
+            />
+          </View>
+          <TouchableOpacity
+            style={styles.btnLogin}
+            onPress={() => navigation.navigate('Home')}
+          >
+            <Text style={{ fontSize: 16 }}>Entrar</Text>
           </TouchableOpacity>
+          <TouchableOpacity><Text style={{ fontSize: 16 }}>Esqueceu a senha ?</Text></TouchableOpacity>
+          <View style={styles.singupContainer}>
+            <Text style={styles.grayText}>Você tem uma conta ? </Text>
+            <TouchableOpacity>
+              <Text style={{ fontSize: 16, color: '#FFBE0C' }}>Crie uma</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
+      </KeyboardAvoidingView>
       <StatusBar style="auto" />
     </View>
   );
