@@ -42,7 +42,9 @@ function Login({ navigation }) {
           >
             <Text style={{ fontSize: 16 }}>Entrar</Text>
           </TouchableOpacity>
-          <TouchableOpacity><Text style={{ fontSize: 16 }}>Esqueceu a senha ?</Text></TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('RecoveryPassword')}>
+            <Text style={{ fontSize: 16 }}>Esqueceu a senha ?</Text>
+          </TouchableOpacity>
           <View style={styles.singupContainer}>
             <Text style={styles.grayText}>Você tem uma conta ? </Text>
             <TouchableOpacity>
