@@ -9,11 +9,10 @@ import Constants from 'expo-constants';
 import CalledButton from '../components/CalledButton';
 
 const called = [
-  { name: 'Davi', distance: 20, id: 149, imgProfile: '../assets/peoples/people1.png', imgCar: '../assets/cars/car1.png' },
-  { name: 'Mauricio', distance: 40, id: 150, imgProfile: '../assets/peoples/people1.png', imgCar: '../assets/cars/car1.png'  },
-  { name: 'Ocatvio', distance: 30, id: 151, imgProfile: '../assets/peoples/people1.png', imgCar: '../assets/cars/car1.png'  },
-  { name: 'Andre', distance: 25, id: 152, imgProfile: '../assets/peoples/people1.png', imgCar: '../assets/cars/car1.png'  },
-  { name: 'Vinicios', distance: 35, id: 153, imgProfile: '../assets/peoples/people1.png', imgCar: '../assets/cars/car1.png'  },
+  { name: 'Davi', distance: 20, id: 149, imgProfile: '../assets/peoples/people1.png', imgCar: '../assets/cars/car1.png', latitude: -22.810701, longitude: -43.325708 },
+  { name: 'Mauricio', distance: 40, id: 150, imgProfile: '../assets/peoples/people1.png', imgCar: '../assets/cars/car1.png', latitude: -22.810623, longitude: -43.323985 },
+  { name: 'Ocatvio', distance: 30, id: 151, imgProfile: '../assets/peoples/people1.png', imgCar: '../assets/cars/car1.png', latitude: -22.808359, longitude: -43.324267 },
+  { name: 'Vinicius', distance: 30, id: 152, imgProfile: '../assets/peoples/people1.png', imgCar: '../assets/cars/car1.png', latitude: -22.811570, longitude: -43.325238 }
 ]
 
 function Home({ navigation }) {
@@ -61,10 +60,7 @@ function Home({ navigation }) {
       ]
     }
   ]
-
-  const fadeAnim = useRef(new Animated.Value(0)).current;
   const [markerWidth, setMarkerWidth] = useState(new Animated.Value(0));
-  const [markerHight, setMarkerHight] = useState(new Animated.Value(0));
 
   Animated.loop(
     Animated.sequence([
@@ -99,17 +95,12 @@ function Home({ navigation }) {
         followsUserLocation={followUser}
         onRegionChange={() => { setFollowUser(false) }}
       >
-        <Marker icon={require('../assets/icons/ellipse.png')} pinColor="#000" coordinate={ { latitude: -22.810701, longitude:-43.325708 } }>
-          <Animated.View style={[styles.markerShadow,{borderWidth: markerWidth}]}><TouchableOpacity style={styles.marker} /></Animated.View>
-        </Marker>
-        <Marker icon={require('../assets/icons/ellipse.png')} pinColor="#000" coordinate={ { latitude: -22.810623, longitude:-43.323985 } }>
-          <Animated.View style={[styles.markerShadow,{borderWidth: markerWidth}]}><TouchableOpacity style={styles.marker} /></Animated.View>
-        </Marker>
+        {called.map(({ name, distance, id, imgProfile, imgCar, latitude, longitude }) => (
+          <Marker key={id} icon={require('../assets/icons/ellipse.png')} pinColor="#000" coordinate={{ latitude: latitude, longitude: longitude }}>
+            <Animated.View style={[styles.markerShadow, { borderWidth: markerWidth }]}><TouchableOpacity style={styles.marker} /></Animated.View>
+          </Marker>
+        ))}
 
-        <Marker icon={require('../assets/icons/ellipse.png')} pinColor="#000" coordinate={ { latitude: -22.808359, longitude:-43.324267 } }>
-          <Animated.View style={[styles.markerShadow,{borderWidth: markerWidth}]}><TouchableOpacity style={styles.marker} /></Animated.View>
-        </Marker>
-        
       </MapView>
 
       <View style={styles.topMenuContainer}>
@@ -239,7 +230,7 @@ const styles = StyleSheet.create({
     borderRadius: '100%',
     backgroundColor: '#FCC836'
   },
-  markerShadow:{
+  markerShadow: {
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#FCC836',
