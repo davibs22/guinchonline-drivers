@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View, ScrollView, Dimensions, Text, Image, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, ScrollView, Dimensions, Text, Image, TextInput, Animated, TouchableOpacity } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
-import { Feather, FontAwesome, FontAwesome5 } from '@expo/vector-icons';
+import { Feather, FontAwesome } from '@expo/vector-icons';
 import Constants from 'expo-constants';
 import CalledButton from '../components/CalledButton';
 
@@ -19,8 +19,6 @@ const called = [
 function Home({ navigation }) {
   const [followUser, setFollowUser] = useState(true)
   const [calledList, setCalledList] = useState(false)
-  const [location, setLocation] = useState(null);
-  const [errorMsg, setErrorMsg] = useState(null);
 
   var mapStyle = [
     {
@@ -33,6 +31,15 @@ function Home({ navigation }) {
       ]
     },
     {
+      "featureType": "poi",
+      "elementType": "labels",
+      "stylers": [
+        {
+          "visibility": "off"
+        }
+      ]
+    },
+    {
       "featureType": "road",
       "elementType": "geometry.fill",
       "stylers": [
@@ -40,7 +47,7 @@ function Home({ navigation }) {
           "color": "#f7d882"
         },
         {
-          "weight": 3.5
+          "weight": 1
         }
       ]
     },
@@ -55,18 +62,27 @@ function Home({ navigation }) {
     }
   ]
 
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const [markerWidth, setMarkerWidth] = useState(new Animated.Value(0));
+  const [markerHight, setMarkerHight] = useState(new Animated.Value(0));
+
+  Animated.loop(
+    Animated.sequence([
+      Animated.timing(markerWidth, {
+        toValue: 30,
+        duration: 1000,
+        useNativeDriver: false
+      }),
+      Animated.timing(markerWidth, {
+        toValue: 0,
+        duration: 1000,
+        useNativeDriver: false
+      }),
+    ])
+  ).start()
+
+
   useEffect(() => {
-    (async () => {
-
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        setErrorMsg('Permission to access location was denied');
-        return;
-      }
-
-      let location = await Location.getCurrentPositionAsync({});
-      setLocation(location);
-    })();
   })
 
   return (
@@ -82,7 +98,19 @@ function Home({ navigation }) {
         customMapStyle={mapStyle}
         followsUserLocation={followUser}
         onRegionChange={() => { setFollowUser(false) }}
-      ></MapView>
+      >
+        <Marker icon={require('../assets/icons/ellipse.png')} pinColor="#000" coordinate={ { latitude: -22.810701, longitude:-43.325708 } }>
+          <Animated.View style={[styles.markerShadow,{borderWidth: markerWidth}]}><TouchableOpacity style={styles.marker} /></Animated.View>
+        </Marker>
+        <Marker icon={require('../assets/icons/ellipse.png')} pinColor="#000" coordinate={ { latitude: -22.810623, longitude:-43.323985 } }>
+          <Animated.View style={[styles.markerShadow,{borderWidth: markerWidth}]}><TouchableOpacity style={styles.marker} /></Animated.View>
+        </Marker>
+
+        <Marker icon={require('../assets/icons/ellipse.png')} pinColor="#000" coordinate={ { latitude: -22.808359, longitude:-43.324267 } }>
+          <Animated.View style={[styles.markerShadow,{borderWidth: markerWidth}]}><TouchableOpacity style={styles.marker} /></Animated.View>
+        </Marker>
+        
+      </MapView>
 
       <View style={styles.topMenuContainer}>
 
@@ -204,6 +232,22 @@ const styles = StyleSheet.create({
     shadowRadius: 13.16,
 
     elevation: 20,
+  },
+  marker: {
+    height: 20,
+    width: 20,
+    borderRadius: '100%',
+    backgroundColor: '#FCC836'
+  },
+  markerShadow:{
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#FCC836',
+    borderColor: '#F2DDA1',
+    height: 60,
+    width: 60,
+    borderRadius: '100%',
+    opacity: 0.85
   }
 });
 
